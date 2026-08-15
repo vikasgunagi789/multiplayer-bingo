@@ -1,0 +1,1086 @@
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body {
+
+    font-family: Arial, sans-serif;
+
+    background: #111827;
+
+    color: white;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 650px;
+
+    text-align: center;
+
+}
+
+
+/* =====================================================
+   HEADINGS
+===================================================== */
+
+h1 {
+
+    font-size: 42px;
+
+    margin-bottom: 25px;
+
+}
+
+
+h2 {
+
+    margin-top: 20px;
+
+    margin-bottom: 15px;
+
+    font-size: 24px;
+
+}
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+input {
+
+    width: 100%;
+
+    padding: 14px;
+
+    margin-bottom: 12px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    outline: none;
+
+}
+
+
+/* =====================================================
+   GENERAL BUTTON
+===================================================== */
+
+button {
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+
+/* =====================================================
+   HOME BUTTONS
+===================================================== */
+
+#createBtn,
+#joinBtn {
+
+    width: 100%;
+
+    padding: 14px;
+
+    background: #22c55e;
+
+    color: white;
+
+    font-size: 16px;
+
+    margin-bottom: 5px;
+
+}
+
+
+#createBtn:hover,
+#joinBtn:hover {
+
+    background: #16a34a;
+
+}
+
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.divider {
+
+    margin: 20px 0;
+
+    color: #94a3b8;
+
+    font-weight: bold;
+
+}
+
+
+/* =====================================================
+   ROOM
+===================================================== */
+
+.room-box {
+
+    background: #1f2937;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    margin-bottom: 15px;
+
+    font-size: 18px;
+
+}
+
+
+.room-box strong {
+
+    color: #22c55e;
+
+    letter-spacing: 3px;
+
+}
+
+
+/* =====================================================
+   PLAYERS
+===================================================== */
+
+.players {
+
+    background: #1f2937;
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    margin-bottom: 15px;
+
+    line-height: 30px;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    background: #1f2937;
+
+    margin-bottom: 10px;
+
+    font-weight: bold;
+
+    font-size: 15px;
+
+}
+
+
+/* =====================================================
+   BINGO LETTERS
+===================================================== */
+
+.bingo-letters {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 20px 0;
+
+}
+
+
+.bingo-letter {
+
+    width: 60px;
+
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: white;
+
+    color: #111827;
+
+    border-radius: 12px;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    transition: 0.3s;
+
+}
+
+
+.bingo-letter.completed {
+
+    background: #22c55e;
+
+    color: white;
+
+    transform: scale(1.08);
+
+    box-shadow:
+        0 0 20px rgba(34, 197, 94, 0.9);
+
+}
+
+
+/* =====================================================
+   NUMBER BOARD
+===================================================== */
+
+.number-board {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin: 20px auto;
+
+    width: 100%;
+
+    max-width: 600px;
+
+}
+
+
+/* =====================================================
+   NUMBER BUTTON
+===================================================== */
+
+.number {
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    background: white;
+
+    color: #111827;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    border-radius: 10px;
+
+    transition:
+        transform 0.15s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+    /* Important for mobile */
+
+    touch-action: manipulation;
+
+}
+
+
+/* =====================================================
+   NUMBER HOVER
+===================================================== */
+
+.number:not(:disabled):hover {
+
+    transform: scale(1.04);
+
+}
+
+
+/* =====================================================
+   NUMBER PRESS EFFECT
+===================================================== */
+
+.number:not(:disabled):active {
+
+    transform: scale(0.94);
+
+}
+
+
+/* =====================================================
+   TEMPORARY SELECTION
+===================================================== */
+
+.number.pending {
+
+    background: #3b82f6 !important;
+
+    color: white !important;
+
+    border: 3px solid #60a5fa;
+
+    box-shadow:
+        0 0 18px rgba(59, 130, 246, 0.9);
+
+}
+
+
+/* =====================================================
+   CONFIRMED NUMBER
+===================================================== */
+
+.number.selected {
+
+    background: #22c55e !important;
+
+    color: white !important;
+
+}
+
+
+/* =====================================================
+   COMPLETED BINGO LINE
+===================================================== */
+
+.number.bingo-line {
+
+    background: #facc15 !important;
+
+    color: #111827 !important;
+
+    border: 3px solid #f59e0b;
+
+    box-shadow:
+        0 0 20px rgba(250, 204, 21, 0.9);
+
+    transform: scale(1.03);
+
+    animation:
+        bingoGlow 1s infinite alternate;
+
+}
+
+
+@keyframes bingoGlow {
+
+    from {
+
+        box-shadow:
+            0 0 8px rgba(245, 158, 11, 0.6);
+
+    }
+
+    to {
+
+        box-shadow:
+            0 0 28px rgba(245, 158, 11, 1);
+
+    }
+
+}
+
+
+/* =====================================================
+   READY BUTTON
+===================================================== */
+
+#readyBtn {
+
+    width: min(260px, 100%);
+
+    padding: 15px 30px;
+
+    background: #3b82f6;
+
+    color: white;
+
+    font-size: 18px;
+
+    margin-bottom: 20px;
+
+    touch-action: manipulation;
+
+}
+
+
+#readyBtn:hover:not(:disabled) {
+
+    background: #2563eb;
+
+}
+
+
+#readyBtn:active:not(:disabled) {
+
+    transform: scale(0.97);
+
+}
+
+
+#readyBtn:disabled {
+
+    background: #475569;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =====================================================
+   SELECTED TEXT
+===================================================== */
+
+.selected-text {
+
+    font-size: 18px;
+
+    margin: 10px;
+
+    min-height: 22px;
+
+}
+
+
+/* =====================================================
+   WINNER
+===================================================== */
+
+.winner-box {
+
+    background: #22c55e;
+
+    color: white;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    margin-top: 15px;
+
+    font-size: 25px;
+
+    font-weight: bold;
+
+    animation:
+        winnerGlow 1s infinite alternate;
+
+}
+
+
+@keyframes winnerGlow {
+
+    from {
+
+        box-shadow:
+            0 0 10px rgba(34, 197, 94, 0.5);
+
+    }
+
+    to {
+
+        box-shadow:
+            0 0 35px rgba(34, 197, 94, 1);
+
+    }
+
+}
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+#gameMessages {
+
+    margin-top: 20px;
+
+    text-align: left;
+
+    max-height: 180px;
+
+    overflow-y: auto;
+
+}
+
+
+#gameMessages p {
+
+    background: #1f2937;
+
+    padding: 10px;
+
+    margin-bottom: 5px;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 700px) {
+
+    body {
+
+        padding: 15px;
+
+        align-items: flex-start;
+
+    }
+
+
+    .container {
+
+        max-width: 600px;
+
+        margin-top: 15px;
+
+    }
+
+
+    h1 {
+
+        font-size: 38px;
+
+    }
+
+
+    .number-board {
+
+        gap: 8px;
+
+    }
+
+
+    .number {
+
+        font-size: 21px;
+
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 500px) {
+
+    body {
+
+        padding: 10px;
+
+        display: block;
+
+        min-height: 100vh;
+
+    }
+
+
+    .container {
+
+        width: 100%;
+
+        margin: 0 auto;
+
+        padding: 5px;
+
+    }
+
+
+    /* -----------------------------
+       TITLE
+    ----------------------------- */
+
+    h1 {
+
+        font-size: 32px;
+
+        margin-bottom: 18px;
+
+    }
+
+
+    h2 {
+
+        font-size: 20px;
+
+        margin-top: 15px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    /* -----------------------------
+       INPUTS
+    ----------------------------- */
+
+    input {
+
+        padding: 13px;
+
+        font-size: 16px;
+
+        border-radius: 8px;
+
+    }
+
+
+    /* -----------------------------
+       ROOM
+    ----------------------------- */
+
+    .room-box {
+
+        font-size: 16px;
+
+        padding: 10px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    /* -----------------------------
+       PLAYERS
+    ----------------------------- */
+
+    .players {
+
+        padding: 10px;
+
+        margin-bottom: 10px;
+
+        line-height: 25px;
+
+        font-size: 14px;
+
+    }
+
+
+    /* -----------------------------
+       STATUS
+    ----------------------------- */
+
+    .status {
+
+        font-size: 14px;
+
+        padding: 10px;
+
+        margin-bottom: 8px;
+
+    }
+
+
+    /* -----------------------------
+       BINGO LETTERS
+    ----------------------------- */
+
+    .bingo-letters {
+
+        gap: 6px;
+
+        margin: 12px 0 15px;
+
+    }
+
+
+    .bingo-letter {
+
+        width: 48px;
+
+        height: 48px;
+
+        border-radius: 9px;
+
+        font-size: 24px;
+
+    }
+
+
+    /* -----------------------------
+       NUMBER BOARD
+    ----------------------------- */
+
+    .number-board {
+
+        width: 100%;
+
+        gap: 6px;
+
+        margin: 15px auto;
+
+    }
+
+
+    /* -----------------------------
+       NUMBER
+    ----------------------------- */
+
+    .number {
+
+        font-size: 18px;
+
+        border-radius: 8px;
+
+        min-width: 0;
+
+    }
+
+
+    /* -----------------------------
+       PENDING
+    ----------------------------- */
+
+    .number.pending {
+
+        border-width: 3px;
+
+        box-shadow:
+            0 0 12px rgba(59, 130, 246, 0.8);
+
+    }
+
+
+    /* -----------------------------
+       BINGO LINE
+    ----------------------------- */
+
+    .number.bingo-line {
+
+        border-width: 3px;
+
+        box-shadow:
+            0 0 12px rgba(250, 204, 21, 0.9);
+
+    }
+
+
+    /* -----------------------------
+       SELECTED TEXT
+    ----------------------------- */
+
+    .selected-text {
+
+        font-size: 16px;
+
+        margin: 8px;
+
+    }
+
+
+    /* -----------------------------
+       READY
+    ----------------------------- */
+
+    #readyBtn {
+
+        width: 100%;
+
+        max-width: 300px;
+
+        padding: 14px;
+
+        font-size: 17px;
+
+        margin-bottom: 12px;
+
+    }
+
+
+    /* -----------------------------
+       WINNER
+    ----------------------------- */
+
+    .winner-box {
+
+        padding: 15px;
+
+        font-size: 21px;
+
+        margin-top: 10px;
+
+    }
+
+
+    /* -----------------------------
+       MESSAGES
+    ----------------------------- */
+
+    #gameMessages {
+
+        max-height: 150px;
+
+        margin-top: 12px;
+
+    }
+
+
+    #gameMessages p {
+
+        padding: 8px;
+
+        font-size: 13px;
+
+    }
+
+}
+
+.dev {
+    margin-top: 5px;
+}
+
+
+/* =====================================================
+   SMALL PHONES
+   Example: 320px - 360px
+===================================================== */
+
+@media (max-width: 360px) {
+
+    body {
+
+        padding: 6px;
+
+    }
+
+
+    .container {
+
+        padding: 3px;
+
+    }
+
+
+    h1 {
+
+        font-size: 28px;
+
+        margin-bottom: 14px;
+
+    }
+
+
+    h2 {
+
+        font-size: 18px;
+
+    }
+
+
+    .bingo-letters {
+
+        gap: 4px;
+
+        margin: 10px 0;
+
+    }
+
+
+    .bingo-letter {
+
+        width: 42px;
+
+        height: 42px;
+
+        font-size: 21px;
+
+        border-radius: 8px;
+
+    }
+
+
+    .number-board {
+
+        gap: 4px;
+
+        margin: 12px auto;
+
+    }
+
+
+    .number {
+
+        font-size: 16px;
+
+        border-radius: 6px;
+
+    }
+
+
+    .number.pending {
+
+        border-width: 2px;
+
+    }
+
+
+    .number.bingo-line {
+
+        border-width: 2px;
+
+    }
+
+
+    #readyBtn {
+
+        padding: 12px;
+
+        font-size: 16px;
+
+    }
+
+}
+
+
+/* =====================================================
+   LANDSCAPE PHONE
+===================================================== */
+
+@media (max-height: 500px) and (orientation: landscape) {
+
+    body {
+
+        align-items: flex-start;
+
+        padding: 10px;
+
+    }
+
+
+    .container {
+
+        max-width: 600px;
+
+        margin: 0 auto;
+
+    }
+
+
+    h1 {
+
+        font-size: 28px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .players {
+
+        padding: 8px;
+
+        margin-bottom: 8px;
+
+    }
+
+
+    .bingo-letters {
+
+        margin: 8px 0;
+
+    }
+
+
+    .bingo-letter {
+
+        width: 40px;
+
+        height: 40px;
+
+        font-size: 20px;
+
+    }
+
+
+    .number-board {
+
+        max-width: 380px;
+
+        gap: 5px;
+
+        margin: 10px auto;
+
+    }
+
+
+    .number {
+
+        font-size: 16px;
+
+    }
+
+
+    #readyBtn {
+
+        padding: 10px 30px;
+
+        margin-bottom: 10px;
+
+    }
+
+}

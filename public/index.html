@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Multiplayer BINGO</title>
+
+    <link
+        rel="stylesheet"
+        href="/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- =================================================
+         HOME SCREEN
+    ================================================== -->
+
+    <div id="home">
+
+        <h1>🎱 BINGO</h1>
+
+        <input
+            id="playerName"
+            type="text"
+            placeholder="Enter your name"
+            maxlength="20"
+        >
+
+        <button id="createBtn">
+            Create Game
+        </button>
+
+
+        <div class="divider">
+            OR
+        </div>
+
+
+        <input
+            id="roomInput"
+            type="text"
+            placeholder="Enter Room Code"
+            maxlength="6"
+        >
+
+        <button id="joinBtn">
+            Join Game
+        </button>
+
+        <div class="dev">
+            <p>Developed By VIKAS GUNAGI</p>
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         GAME SCREEN
+    ================================================== -->
+
+    <div
+        id="game"
+        style="display: none;"
+    >
+
+        <h1>🎱 BINGO</h1>
+
+
+        <div class="room-box">
+
+            Room Code:
+
+            <strong id="roomCode">
+                ------
+            </strong>
+
+        </div>
+
+
+        <!-- PLAYERS -->
+
+        <div class="players">
+
+            <div id="player1">
+                Player 1: Waiting...
+            </div>
+
+            <div id="player2">
+                Player 2: Waiting...
+            </div>
+
+        </div>
+
+
+        <!-- TURN STATUS -->
+
+        <div
+            id="status"
+            class="status"
+        >
+            Waiting for opponent...
+        </div>
+
+
+        <!-- BINGO LETTERS -->
+
+        <div class="bingo-letters">
+
+            <div
+                id="letter-B"
+                class="bingo-letter"
+            >
+                B
+            </div>
+
+            <div
+                id="letter-I"
+                class="bingo-letter"
+            >
+                I
+            </div>
+
+            <div
+                id="letter-N"
+                class="bingo-letter"
+            >
+                N
+            </div>
+
+            <div
+                id="letter-G"
+                class="bingo-letter"
+            >
+                G
+            </div>
+
+            <div
+                id="letter-O"
+                class="bingo-letter"
+            >
+                O
+            </div>
+
+        </div>
+
+
+        <h2>
+            Select a number
+        </h2>
+
+
+        <!-- NUMBER BOARD -->
+
+        <div
+            id="numberBoard"
+            class="number-board"
+        ></div>
+
+
+        <!-- CURRENT SELECTION -->
+
+        <p
+            id="selectedText"
+            class="selected-text"
+        >
+            Selected: -
+        </p>
+
+
+        <!-- READY -->
+
+        <button
+            id="readyBtn"
+            disabled
+        >
+            READY
+        </button>
+
+        <div class="dev">
+            <p>Developed By VIKAS GUNAGI</p>
+        </div>
+
+
+        <!-- WINNER -->
+
+        <div
+            id="winnerBox"
+            class="winner-box"
+            style="display: none;"
+        >
+
+            <div id="winnerText"></div>
+
+        </div>
+
+
+        <!-- MESSAGES -->
+
+        <div id="gameMessages"></div>
+
+    </div>
+
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="/script.js"></script>
+
+</body>
+
+</html>
