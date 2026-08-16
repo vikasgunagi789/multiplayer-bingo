@@ -6,7 +6,7 @@
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "vikas gunagi",
   "license": "ISC",
   "description": "Real-time multiplayer Bingo game",
   "dependencies": {
