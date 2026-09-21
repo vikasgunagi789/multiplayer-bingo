@@ -4,7 +4,6 @@
 
 const socket = io();
 
-
 // =====================================================
 // HTML ELEMENTS
 // =====================================================
@@ -57,6 +56,11 @@ const winnerBox =
 const winnerText =
     document.getElementById("winnerText");
 
+const playAgainBtn =
+    document.getElementById("playAgainBtn");
+
+const leaveGameBtn =
+    document.getElementById("leaveGameBtn");
 
 // =====================================================
 // GAME VARIABLES
@@ -66,7 +70,8 @@ let currentRoom = "";
 
 let myBoard = [];
 
-let selectedNumbers = new Set();
+let selectedNumbers =
+    new Set();
 
 let pendingNumber = null;
 
@@ -74,6 +79,63 @@ let isMyTurn = false;
 
 let gameOver = false;
 
+let rematchRequested = false;
+
+// =====================================================
+// PLAY AGAIN
+// =====================================================
+
+if (playAgainBtn) {
+
+    playAgainBtn.addEventListener(
+        "click",
+        () => {
+
+            if (!gameOver) {
+                return;
+            }
+
+            if (rematchRequested) {
+                return;
+            }
+
+            rematchRequested = true;
+
+            playAgainBtn.disabled =
+                true;
+
+            playAgainBtn.textContent =
+                "⏳ WAITING...";
+
+            status.textContent =
+                "⏳ WAITING FOR OPPONENT...";
+
+            socket.emit(
+                "playAgain",
+                {
+                    roomCode:
+                        currentRoom
+                }
+            );
+        }
+    );
+}
+
+// =====================================================
+// LEAVE GAME
+// =====================================================
+
+if (leaveGameBtn) {
+
+    leaveGameBtn.addEventListener(
+        "click",
+        () => {
+
+            window.location.reload();
+
+        }
+    );
+}
 
 // =====================================================
 // CREATE ROOM
@@ -95,17 +157,15 @@ createBtn.addEventListener(
             return;
         }
 
-
         socket.emit(
             "createRoom",
             {
-                playerName: name
+                playerName:
+                    name
             }
         );
-
     }
 );
-
 
 // =====================================================
 // ROOM CREATED
@@ -113,7 +173,7 @@ createBtn.addEventListener(
 
 socket.on(
     "roomCreated",
-    (data) => {
+    data => {
 
         currentRoom =
             data.roomCode;
@@ -123,10 +183,8 @@ socket.on(
         addMessage(
             `🎮 Room created! Room code: ${currentRoom}`
         );
-
     }
 );
-
 
 // =====================================================
 // JOIN ROOM
@@ -140,8 +198,9 @@ joinBtn.addEventListener(
             playerNameInput.value.trim();
 
         const code =
-            roomInput.value.trim().toUpperCase();
-
+            roomInput.value
+                .trim()
+                .toUpperCase();
 
         if (!name) {
 
@@ -152,7 +211,6 @@ joinBtn.addEventListener(
             return;
         }
 
-
         if (!code) {
 
             alert(
@@ -162,21 +220,18 @@ joinBtn.addEventListener(
             return;
         }
 
-
         socket.emit(
             "joinRoom",
             {
+                roomCode:
+                    code,
 
-                roomCode: code,
-
-                playerName: name
-
+                playerName:
+                    name
             }
         );
-
     }
 );
-
 
 // =====================================================
 // ROOM JOINED
@@ -184,7 +239,7 @@ joinBtn.addEventListener(
 
 socket.on(
     "roomJoined",
-    (data) => {
+    data => {
 
         currentRoom =
             data.roomCode;
@@ -194,10 +249,8 @@ socket.on(
         addMessage(
             `🚪 Joined room ${currentRoom}`
         );
-
     }
 );
-
 
 // =====================================================
 // SHOW GAME
@@ -213,17 +266,15 @@ function showGame() {
 
     roomCodeElement.textContent =
         currentRoom;
-
 }
 
-
 // =====================================================
-// INITIAL GAME STATE
+// GAME STATE
 // =====================================================
 
 socket.on(
     "gameState",
-    (data) => {
+    data => {
 
         currentRoom =
             data.roomCode;
@@ -237,15 +288,14 @@ socket.on(
             );
 
         isMyTurn =
-            data.turnPlayerId === socket.id;
+            data.turnPlayerId ===
+            socket.id;
 
         gameOver =
             Boolean(data.winner);
 
-
         roomCodeElement.textContent =
             currentRoom;
-
 
         createBoard();
 
@@ -257,27 +307,29 @@ socket.on(
 
         updateBingo();
 
-
+        // Game finished
         if (data.winner) {
 
             showWinner(
                 data.winnerName
             );
 
-        }
+        } else {
 
+            // New game
+            hideWinner();
+        }
     }
 );
 
-
 // =====================================================
-// CREATE RANDOM BOARD
+// CREATE BOARD
 // =====================================================
 
 function createBoard() {
 
-    numberBoard.innerHTML = "";
-
+    numberBoard.innerHTML =
+        "";
 
     for (
         let row = 0;
@@ -294,24 +346,19 @@ function createBoard() {
             const number =
                 myBoard[row][col];
 
-
             const button =
                 document.createElement(
                     "button"
                 );
 
-
             button.className =
                 "number";
-
 
             button.textContent =
                 number;
 
-
             button.dataset.number =
                 number;
-
 
             button.addEventListener(
                 "click",
@@ -320,24 +367,17 @@ function createBoard() {
                     selectNumber(
                         number
                     );
-
                 }
             );
-
 
             numberBoard.appendChild(
                 button
             );
-
         }
-
     }
 
-
     updateBoard();
-
 }
-
 
 // =====================================================
 // SELECT NUMBER
@@ -345,16 +385,9 @@ function createBoard() {
 
 function selectNumber(number) {
 
-    // Game already finished
-
     if (gameOver) {
-
         return;
-
     }
-
-
-    // Not my turn
 
     if (!isMyTurn) {
 
@@ -363,11 +396,7 @@ function selectNumber(number) {
         );
 
         return;
-
     }
-
-
-    // Already selected and confirmed
 
     if (
         selectedNumbers.has(number)
@@ -378,11 +407,7 @@ function selectNumber(number) {
         );
 
         return;
-
     }
-
-
-    // Already selected temporarily
 
     if (
         pendingNumber !== null
@@ -393,58 +418,42 @@ function selectNumber(number) {
         );
 
         return;
-
     }
-
-
-    // Send private selection to server
 
     socket.emit(
         "selectNumber",
         {
-
             roomCode:
                 currentRoom,
 
             number:
                 number
-
         }
     );
-
 }
-
 
 // =====================================================
 // PRIVATE SELECTION
 // =====================================================
-//
-// IMPORTANT:
-// This event goes ONLY to the player who selected.
-// The opponent does NOT see it yet.
-//
 
 socket.on(
     "selectionPending",
-    (data) => {
+    data => {
 
         pendingNumber =
-            Number(data.number);
-
+            Number(
+                data.number
+            );
 
         selectedText.textContent =
             `Selected: ${pendingNumber}`;
 
-
         readyBtn.disabled =
             false;
 
-
         updateBoard();
-
     }
 );
-
 
 // =====================================================
 // READY BUTTON
@@ -455,11 +464,8 @@ readyBtn.addEventListener(
     () => {
 
         if (gameOver) {
-
             return;
-
         }
-
 
         if (!isMyTurn) {
 
@@ -468,105 +474,72 @@ readyBtn.addEventListener(
             );
 
             return;
-
         }
 
-
-        if (pendingNumber === null) {
+        if (
+            pendingNumber === null
+        ) {
 
             alert(
                 "Please select a number first!"
             );
 
             return;
-
         }
-
-
-        // Disable immediately
 
         readyBtn.disabled =
             true;
 
-
-        // Send READY to server
-
         socket.emit(
             "playerReady",
             {
-
                 roomCode:
                     currentRoom
-
             }
         );
-
     }
 );
-
 
 // =====================================================
 // NUMBER CONFIRMED
 // =====================================================
-//
-// This event is sent to BOTH players only AFTER
-// READY has been clicked.
-//
 
 socket.on(
     "numberConfirmed",
-    (data) => {
+    data => {
 
         const number =
-            Number(data.number);
-
-
-        // Add permanently
+            Number(
+                data.number
+            );
 
         selectedNumbers.add(
             number
         );
 
-
-        // If this was my number
-
         if (
-            data.playerId === socket.id
+            data.playerId ===
+            socket.id
         ) {
 
             pendingNumber =
                 null;
 
-
             selectedText.textContent =
                 `Confirmed: ${number}`;
 
-        }
-
-
-        // Opponent's number
-
-        else {
+        } else {
 
             addMessage(
                 `🎯 ${data.playerName} called ${number}`
             );
-
         }
-
-
-        // IMPORTANT:
-        // Do NOT recreate the board here.
-        // We only update its classes.
-        // Therefore selected numbers never disappear.
 
         updateBoard();
 
         updateBingo();
-
     }
 );
-
 
 // =====================================================
 // TURN CHANGED
@@ -574,32 +547,27 @@ socket.on(
 
 socket.on(
     "turnChanged",
-    (data) => {
+    data => {
 
         isMyTurn =
-            data.playerId === socket.id;
-
+            data.playerId ===
+            socket.id;
 
         pendingNumber =
             null;
 
-
         readyBtn.disabled =
             true;
-
 
         updateTurn();
 
         updateBoard();
 
-
         addMessage(
             `🎯 ${data.playerName}'s turn`
         );
-
     }
 );
-
 
 // =====================================================
 // UPDATE TURN
@@ -613,9 +581,7 @@ function updateTurn() {
             "🏆 GAME OVER";
 
         return;
-
     }
-
 
     if (isMyTurn) {
 
@@ -626,11 +592,8 @@ function updateTurn() {
 
         status.textContent =
             "🔴 OPPONENT'S TURN — Please wait";
-
     }
-
 }
-
 
 // =====================================================
 // UPDATE BOARD
@@ -643,7 +606,6 @@ function updateBoard() {
             ".number"
         );
 
-
     buttons.forEach(
         button => {
 
@@ -652,27 +614,19 @@ function updateBoard() {
                     button.dataset.number
                 );
 
-
-            // Remove temporary styles
-
             button.classList.remove(
                 "pending"
             );
-
-
-            // Remove line style temporarily
 
             button.classList.remove(
                 "bingo-line"
             );
 
-
-            // =================================================
-            // CONFIRMED NUMBER
-            // =================================================
-
+            // Confirmed number
             if (
-                selectedNumbers.has(number)
+                selectedNumbers.has(
+                    number
+                )
             ) {
 
                 button.classList.add(
@@ -683,16 +637,12 @@ function updateBoard() {
                     true;
 
                 return;
-
             }
 
-
-            // =================================================
-            // MY TEMPORARY NUMBER
-            // =================================================
-
+            // Temporary number
             if (
-                pendingNumber === number
+                pendingNumber ===
+                number
             ) {
 
                 button.classList.add(
@@ -703,33 +653,21 @@ function updateBoard() {
                     false;
 
                 return;
-
             }
 
-
-            // =================================================
-            // AVAILABLE NUMBER
-            // =================================================
-
+            // Available number
             button.classList.remove(
                 "selected"
             );
 
-
             button.disabled =
                 !isMyTurn ||
                 pendingNumber !== null;
-
         }
     );
 
-
-    // Add Bingo line styles
-
     highlightBingoLines();
-
 }
-
 
 // =====================================================
 // BINGO LINE DETECTION
@@ -738,7 +676,6 @@ function updateBoard() {
 function getCompletedLines() {
 
     const lines = [];
-
 
     // =================================================
     // HORIZONTAL
@@ -751,7 +688,6 @@ function getCompletedLines() {
     ) {
 
         let complete = true;
-
 
         for (
             let col = 0;
@@ -768,22 +704,16 @@ function getCompletedLines() {
                 complete = false;
 
                 break;
-
             }
-
         }
-
 
         if (complete) {
 
             lines.push(
                 `row-${row}`
             );
-
         }
-
     }
-
 
     // =================================================
     // VERTICAL
@@ -796,7 +726,6 @@ function getCompletedLines() {
     ) {
 
         let complete = true;
-
 
         for (
             let row = 0;
@@ -813,30 +742,22 @@ function getCompletedLines() {
                 complete = false;
 
                 break;
-
             }
-
         }
-
 
         if (complete) {
 
             lines.push(
                 `col-${col}`
             );
-
         }
-
     }
-
 
     // =================================================
     // MAIN DIAGONAL
     // =================================================
 
-    let diagonal1 =
-        true;
-
+    let diagonal1 = true;
 
     for (
         let i = 0;
@@ -854,28 +775,21 @@ function getCompletedLines() {
                 false;
 
             break;
-
         }
-
     }
-
 
     if (diagonal1) {
 
         lines.push(
             "diagonal-main"
         );
-
     }
-
 
     // =================================================
     // OTHER DIAGONAL
     // =================================================
 
-    let diagonal2 =
-        true;
-
+    let diagonal2 = true;
 
     for (
         let i = 0;
@@ -893,25 +807,18 @@ function getCompletedLines() {
                 false;
 
             break;
-
         }
-
     }
-
 
     if (diagonal2) {
 
         lines.push(
             "diagonal-other"
         );
-
     }
 
-
     return lines;
-
 }
-
 
 // =====================================================
 // HIGHLIGHT BINGO LINES
@@ -922,12 +829,10 @@ function highlightBingoLines() {
     const lines =
         getCompletedLines();
 
-
     const buttons =
         document.querySelectorAll(
             ".number"
         );
-
 
     buttons.forEach(
         button => {
@@ -935,10 +840,8 @@ function highlightBingoLines() {
             button.classList.remove(
                 "bingo-line"
             );
-
         }
     );
-
 
     lines.forEach(
         line => {
@@ -952,7 +855,6 @@ function highlightBingoLines() {
                         line.split("-")[1]
                     );
 
-
                 for (
                     let col = 0;
                     col < 5;
@@ -962,13 +864,9 @@ function highlightBingoLines() {
                     markNumber(
                         myBoard[row][col]
                     );
-
                 }
 
-            }
-
-
-            else if (
+            } else if (
                 line.startsWith("col-")
             ) {
 
@@ -976,7 +874,6 @@ function highlightBingoLines() {
                     Number(
                         line.split("-")[1]
                     );
-
 
                 for (
                     let row = 0;
@@ -987,13 +884,9 @@ function highlightBingoLines() {
                     markNumber(
                         myBoard[row][col]
                     );
-
                 }
 
-            }
-
-
-            else if (
+            } else if (
                 line ===
                 "diagonal-main"
             ) {
@@ -1007,13 +900,9 @@ function highlightBingoLines() {
                     markNumber(
                         myBoard[i][i]
                     );
-
                 }
 
-            }
-
-
-            else if (
+            } else if (
                 line ===
                 "diagonal-other"
             ) {
@@ -1027,16 +916,11 @@ function highlightBingoLines() {
                     markNumber(
                         myBoard[i][4 - i]
                     );
-
                 }
-
             }
-
         }
     );
-
 }
-
 
 // =====================================================
 // MARK NUMBER AS BINGO LINE
@@ -1049,17 +933,13 @@ function markNumber(number) {
             `.number[data-number="${number}"]`
         );
 
-
     if (button) {
 
         button.classList.add(
             "bingo-line"
         );
-
     }
-
 }
-
 
 // =====================================================
 // UPDATE BINGO LETTERS
@@ -1070,16 +950,13 @@ function updateBingo() {
     const lines =
         getCompletedLines();
 
-
-    const letters =
-        [
-            "B",
-            "I",
-            "N",
-            "G",
-            "O"
-        ];
-
+    const letters = [
+        "B",
+        "I",
+        "N",
+        "G",
+        "O"
+    ];
 
     letters.forEach(
         (letter, index) => {
@@ -1089,6 +966,9 @@ function updateBingo() {
                     `letter-${letter}`
                 );
 
+            if (!element) {
+                return;
+            }
 
             if (
                 index < lines.length
@@ -1103,17 +983,12 @@ function updateBingo() {
                 element.classList.remove(
                     "completed"
                 );
-
             }
-
         }
     );
 
-
     highlightBingoLines();
-
 }
-
 
 // =====================================================
 // WINNER
@@ -1121,19 +996,23 @@ function updateBingo() {
 
 socket.on(
     "winner",
-    (data) => {
+    data => {
 
-        gameOver =
-            true;
+        gameOver = true;
 
+        isMyTurn = false;
+
+        pendingNumber = null;
+
+        readyBtn.disabled = true;
 
         showWinner(
             data.winnerName
         );
 
-
         if (
-            data.winnerId === socket.id
+            data.winnerId ===
+            socket.id
         ) {
 
             status.textContent =
@@ -1143,17 +1022,13 @@ socket.on(
 
             status.textContent =
                 `🏆 ${data.winnerName} WON!`;
-
         }
-
 
         updateBoard();
 
         updateBingo();
-
     }
 );
-
 
 // =====================================================
 // SHOW WINNER
@@ -1164,12 +1039,123 @@ function showWinner(name) {
     winnerBox.style.display =
         "block";
 
-
     winnerText.textContent =
         `🏆 ${name} WINS! 🎉`;
 
+    rematchRequested =
+        false;
+
+    playAgainBtn.disabled =
+        false;
+
+    playAgainBtn.textContent =
+        "🔄 PLAY AGAIN";
 }
 
+// =====================================================
+// HIDE WINNER
+// =====================================================
+
+function hideWinner() {
+
+    winnerBox.style.display =
+        "none";
+
+    rematchRequested =
+        false;
+
+    playAgainBtn.disabled =
+        false;
+
+    playAgainBtn.textContent =
+        "🔄 PLAY AGAIN";
+}
+
+// =====================================================
+// REMATCH WAITING
+// =====================================================
+
+socket.on(
+    "rematchWaiting",
+    data => {
+
+        rematchRequested =
+            true;
+
+        playAgainBtn.disabled =
+            true;
+
+        playAgainBtn.textContent =
+            "⏳ WAITING...";
+
+        status.textContent =
+            "⏳ WAITING FOR OPPONENT...";
+
+        addMessage(
+            data.message
+        );
+    }
+);
+
+// =====================================================
+// OPPONENT READY FOR REMATCH
+// =====================================================
+
+socket.on(
+    "opponentRematchReady",
+    data => {
+
+        addMessage(
+            `🔄 ${data.playerName} is ready for another game!`
+        );
+    }
+);
+
+// =====================================================
+// GAME RESTARTED
+// =====================================================
+
+socket.on(
+    "gameRestarted",
+    data => {
+
+        // Reset local game variables
+        gameOver = false;
+
+        pendingNumber = null;
+
+        selectedNumbers =
+            new Set();
+
+        isMyTurn = false;
+
+        rematchRequested =
+            false;
+
+        // Reset selected text
+        selectedText.textContent =
+            "Selected: -";
+
+        // Reset READY
+        readyBtn.disabled =
+            true;
+
+        // Hide winner
+        hideWinner();
+
+        // Message
+        addMessage(
+            data.message
+        );
+
+        // Update UI
+        updateTurn();
+
+        updateBoard();
+
+        updateBingo();
+    }
+);
 
 // =====================================================
 // PLAYERS UPDATED
@@ -1177,15 +1163,13 @@ function showWinner(name) {
 
 socket.on(
     "playersUpdated",
-    (players) => {
+    players => {
 
         updatePlayers(
             players
         );
-
     }
 );
-
 
 // =====================================================
 // UPDATE PLAYER NAMES
@@ -1198,14 +1182,11 @@ function updatePlayers(players) {
             ? `👤 ${players[0].name}`
             : "Player 1: Waiting...";
 
-
     player2.textContent =
         players[1]
             ? `👤 ${players[1].name}`
             : "Player 2: Waiting...";
-
 }
-
 
 // =====================================================
 // ERROR
@@ -1213,15 +1194,30 @@ function updatePlayers(players) {
 
 socket.on(
     "errorMessage",
-    (message) => {
+    message => {
+
+        // If Play Again failed,
+        // allow the button to be clicked again.
+        if (
+            gameOver &&
+            rematchRequested
+        ) {
+
+            rematchRequested =
+                false;
+
+            playAgainBtn.disabled =
+                false;
+
+            playAgainBtn.textContent =
+                "🔄 PLAY AGAIN";
+        }
 
         addMessage(
             `❌ ${message}`
         );
-
     }
 );
-
 
 // =====================================================
 // PLAYER DISCONNECTED
@@ -1229,20 +1225,30 @@ socket.on(
 
 socket.on(
     "playerDisconnected",
-    (data) => {
+    data => {
+
+        // If opponent leaves during rematch
+        rematchRequested =
+            false;
+
+        if (gameOver) {
+
+            playAgainBtn.disabled =
+                false;
+
+            playAgainBtn.textContent =
+                "🔄 PLAY AGAIN";
+        }
 
         addMessage(
             `⚠️ ${data.message}`
         );
 
-
         updatePlayers(
             data.players
         );
-
     }
 );
-
 
 // =====================================================
 // ADD MESSAGE
@@ -1255,17 +1261,13 @@ function addMessage(message) {
             "p"
         );
 
-
     p.textContent =
         message;
-
 
     gameMessages.appendChild(
         p
     );
 
-
     gameMessages.scrollTop =
         gameMessages.scrollHeight;
-
 }
